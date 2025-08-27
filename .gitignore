@@ -1,0 +1,86 @@
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
+
+# ---- Editors / IDE ----
+.idea/
+.vscode/
+*.code-workspace
+
+# ---- Python (backend) ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.egg
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.pyre/
+.ruff_cache/
+.tox/
+.coverage
+.coverage.*
+.cache/
+dist/
+build/
+wheelhouse/
+.pyenv/
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+
+# Django
+# SQLite (если используешь локально)
+db.sqlite3
+# Collected static & media
+static/
+staticfiles/
+media/
+
+
+# ---- JavaScript / TypeScript (frontend) ----
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+.yarn-cache/
+yarn.lock.tmp
+
+# Next.js / React build output & caches
+.next/
+out/
+.vercel/
+.turbo/
+.eslintcache
+.parcel-cache/
+.swc/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+
+# ---- Docker ----
+# локальные override’ы/секреты
+docker-compose.override.yml
+*.env.docker
+# Build cache / misc
+**/.dockerignore
+
+# ---- Tests / Coverage ----
+coverage/
+coverage.xml
+junit.xml
+htmlcov/
+
+# ---- Misc ----
+# кэш линтеров/форматтеров
+.prettier-cache

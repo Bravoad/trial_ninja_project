@@ -1,0 +1,89 @@
+# docker-compose.yml
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: appdb
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  elasticsearch:
+    image: bitnami/elasticsearch:8.13.4
+    environment:
+      - ELASTICSEARCH_ENABLE_SECURITY=no
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_cluster/health"]
+  kibana:
+    image: bitnami/kibana:8.13.4
+    environment:
+      - KIBANA_ELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  backend:
+    container_name: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    healthcheck:
+      # если нет curl в твоём образе — см. комментарий ниже
+      test: [ "CMD-SHELL", "curl -fsS http://localhost:8000/api/i18n/messages/ru >/dev/null || exit 1" ]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    env_file:
+      - backend/.env
+    volumes:
+      - ./backend:/app
+      - static_volume:/app/staticfiles   # <- чтобы collectstatic складывал сюда
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py reindex_articles &&
+             uvicorn app.asgi:application --host 0.0.0.0 --port 8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    env_file:
+      - frontend/.env.local
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    command: >
+      sh -c "npm run dev"
+
+volumes:
+  pgdata:
+  static_volume:
+  frontend_node_modules:
