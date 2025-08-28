@@ -24,42 +24,6 @@ Docker Compose: PostgreSQL, Elasticsearch, Kibana, Backend (Uvicorn), Frontend (
 
 collectstatic без nginx: статика собирается в volume staticfiles/.
 
-Архитектура и структура
-next-django-es/
-├─ backend/
-│  ├─ app/
-│  │  ├─ core/
-│  │  │  ├─ models.py              # Article (tags, created_at) + translation options
-│  │  │  ├─ schemas.py             # Pydantic (ArticleIn/Out, SearchHit, Page*)
-│  │  │  ├─ api.py                 # /api/articles CRUD (+ ?lang)
-│  │  │  ├─ search_api.py          # /api/search (elasticsearch-dsl)
-│  │  │  ├─ documents.py           # ES Document + analyzers, highlights
-│  │  │  ├─ management/commands/reindex_articles.py
-│  │  ├─ i18n/
-│  │  │  └─ api.py                 # /api/i18n/messages/{locale} (отдаёт JSON словари)
-│  │  ├─ urls.py                   # Ninja API + routers
-│  │  ├─ translation.py            # modeltranslation register(Article)
-│  ├─ app/settings.py              # CORS/CSRF, ELASTICSEARCH_DSL, INSTALLED_APPS ...
-│  ├─ app/asgi.py
-│  ├─ manage.py
-│  ├─ Dockerfile
-│  └─ .env                         # см. пример ниже
-│
-├─ frontend/
-│  ├─ app/[locale]/layout.tsx      # NextIntlClientProvider + SSR messages
-│  ├─ app/[locale]/page.tsx        # Поиск, список, создание/удаление
-│  ├─ components/LocaleSwitch.tsx  # Переключатель языка (client)
-│  ├─ i18n/request.ts              # getRequestConfig -> тянет словари с бэка
-│  ├─ i18n/api.ts                  # fetch JSON словарей (+ zod схемы)
-│  ├─ lib/api.ts                   # вызовы к /api (включая ?lang)
-│  ├─ lib/types.ts                 # типы Article/Search/Page*
-│  ├─ middleware.ts                # next-intl middleware
-│  ├─ Dockerfile
-│  └─ .env.local                   # см. пример ниже
-│
-├─ docker-compose.yml
-├─ .gitignore
-└─ README.md
 
 Быстрый старт (Docker)
 
