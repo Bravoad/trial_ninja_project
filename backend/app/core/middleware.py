@@ -19,5 +19,5 @@ class QueryStringLocaleMiddleware:
                 translation.activate(lang)
                 request.LANGUAGE_CODE = lang
         response = self.get_response(request)
-        translation.deactivate()  # очистим после ответа
+        translation.deactivate()
         return response

@@ -55,9 +55,7 @@ def search(
 
     items: List[SearchHit] = []
     for h in r.hits:
-        # _source как dict
         src = h.to_dict()
-        # highlight может быть AttrDict — берём как dict безопасно
         hl_obj = getattr(h.meta, "highlight", None)
         if hl_obj:
             try:
@@ -70,10 +68,8 @@ def search(
         else:
             hl = {}
 
-        # Заголовок: локализованное поле, иначе альтернативное
         title_val = (src.get(title_key) or src.get(alt_title_key) or "") or ""
 
-        # Сниппет: highlight тела; если нет — highlight заголовка; иначе кусок тела/заголовка
         snippet_list = hl.get(body_key) or hl.get(title_key)
         if snippet_list:
             snippet = " … ".join(snippet_list)

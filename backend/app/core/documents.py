@@ -7,7 +7,6 @@ from .models import Article
 
 @registry.register_document
 class ArticleDocument(Document):
-    # Текстовые поля с языковыми анализаторами + raw для сортировок/агрегаций
     title_ru = fields.TextField(
         analyzer="ru_an",
         fields={"raw": fields.KeywordField(normalizer="lowercase", ignore_above=256)},
@@ -23,7 +22,7 @@ class ArticleDocument(Document):
     tags = fields.KeywordField(normalizer="lowercase", ignore_above=256)
 
     class Index:
-        name = settings.ES_INDEX  # например "articles"
+        name = settings.ES_INDEX
         settings = {
             "number_of_shards": 1,
             "number_of_replicas": 0,

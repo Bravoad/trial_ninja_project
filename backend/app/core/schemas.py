@@ -18,6 +18,7 @@ class ArticleOut(Schema):
     tags: List[str]
     created_at: datetime
 
+
 class ArticleI18NOut(Schema):
     id: int
     tags: List[str]
@@ -29,12 +30,14 @@ class ArticleI18NOut(Schema):
     title_en: Optional[str] = None
     body_en:  Optional[str] = None
 
+
 class SearchHit(Schema):
     id: int
     score: Optional[float] = None
-    title: str            # локализованный заголовок
-    snippet: str          # локализованный сниппет
+    title: str
+    snippet: str
     tags: List[str]
+
 class PageArticles(Schema):
     total: int
     limit: int

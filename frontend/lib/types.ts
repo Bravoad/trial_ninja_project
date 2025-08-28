@@ -1,10 +1,9 @@
-// Общие типы под твой бэкенд
 export type Article = {
   id: number;
   title: string;
   body: string;
   tags: string[];
-  created_at: string; // ISO
+  created_at: string;
 };
 
 export type PageArticles = {

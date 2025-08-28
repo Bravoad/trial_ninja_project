@@ -1,8 +1,7 @@
-# app/core/search.py
 from typing import List, Dict, Any, Optional
 from django.utils import translation
 
-from .documents import ArticleDocument  # django-elasticsearch-dsl Document
+from .documents import ArticleDocument
 
 
 def _resolve_lang(lang_hint: Optional[str] = None) -> str:

@@ -1,4 +1,3 @@
-// frontend/lib/api.ts
 import {Article, PageArticles, SearchHit} from "./types";
 
 const API = process.env.NEXT_PUBLIC_API_BASE!;

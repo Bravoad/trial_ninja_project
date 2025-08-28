@@ -5,7 +5,7 @@ export function stripTrailingSlash(u: string) {
 export function getServerApiBase(): string {
   const base =
     process.env.SERVER_API_BASE ||
-    process.env.NEXT_PUBLIC_API_BASE || // запасной вариант
+    process.env.NEXT_PUBLIC_API_BASE ||
     'http://localhost:8000/api';
   return stripTrailingSlash(base);
 }

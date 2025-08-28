@@ -1,7 +1,6 @@
 export function stripTrailingSlash(s: string) {
   return s.replace(/\/+$/, '');
 }
-// frontend/lib/api-base.ts
 export function getServerApiBase() {
   const base = process.env.SERVER_API_BASE;
   if (!base) throw new Error("SERVER_API_BASE is not set");

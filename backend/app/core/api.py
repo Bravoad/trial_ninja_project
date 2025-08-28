@@ -39,8 +39,8 @@ def list_articles(
         items = [
             ArticleOut(
                 id=a.id,
-                title=a.title,      # локализованное значение
-                body=a.body,        # локализованное значение
+                title=a.title,
+                body=a.body,
                 tags=a.tags,
                 created_at=a.created_at,
             )
@@ -118,7 +118,6 @@ def update_article(
 @router.delete("articles/{article_id}")
 @transaction.atomic
 def delete_article_api(request, article_id: int, lang: Optional[Lang] = Query(None)):
-    # lang параметр здесь не обязателен, но оставим для единообразия API
     a = get_object_or_404(Article, id=article_id)
     a.delete()
     return {"ok": True}
