@@ -30,7 +30,7 @@ collectstatic без nginx: статика собирается в volume static
 Заполни окружения:
 
 backend/.env
-
+```
 DJANGO_SECRET_KEY=django-insecure-...            # любой
 DJANGO_DEBUG=1
 DB_NAME=appdb
@@ -44,18 +44,20 @@ CORS_ALLOW_ALL_ORIGINS=1
 CSRF_TRUSTED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000
 ELASTIC_URL=http://elasticsearch:9200
 ES_INDEX=articles
-
+```
 
 frontend/.env.local
 (если фронт в контейнере, а бэк на хосте — используй host.docker.internal)
 
 # вариант А: бэк В КОНТЕЙНЕРЕ
+```
 SERVER_API_BASE=http://backend:8000/api
 NEXT_PUBLIC_API_BASE=http://localhost:8000/api
-
+```
 # вариант Б: бэк на ХОСТЕ (Windows/Mac)
-# SERVER_API_BASE=http://host.docker.internal:8000/api
-# NEXT_PUBLIC_API_BASE=http://host.docker.internal:8000/api
+
+SERVER_API_BASE=http://host.docker.internal:8000/api
+NEXT_PUBLIC_API_BASE=http://host.docker.internal:8000/api
 
 
 Запусти всё:
@@ -82,13 +84,13 @@ Backend
 Article (пример): title, body, tags: List[str], created_at.
 django-modeltranslation генерирует title_ru/title_en, body_ru/body_en.
 Активная локаль определяется так:
-
+```python
 def req_lang(request) -> str:
     return (request.GET.get("lang")
             or getattr(request, "LANGUAGE_CODE", None)
             or translation.get_language()
             or "ru")[:2]
-
+```
 API (Ninja)
 
 GET /api/articles?limit&offset&lang=ru|en → PageArticles
@@ -127,9 +129,9 @@ Reindex / сиды
 Collect static (без nginx)
 
 В контейнере:
-
+```sh
 python manage.py collectstatic --noinput
-
+```
 
 Статика уходит в /app/staticfiles (volume static_volume).
 Для прод-сценария добавь WhiteNoise или отдельный статика-сервер — в демо достаточно dev-режима/volume.
@@ -192,16 +194,21 @@ NEXT_PUBLIC_API_BASE — то же для браузера (как правил�
 
 Примеры запросов
 # Словари i18n
+```
 curl -s http://localhost:8000/api/i18n/messages/ru
+
 curl -s http://localhost:8000/api/i18n/messages/en
-
+```
 # Список статей (ru)
+```
 curl -s "http://localhost:8000/api/articles?limit=5&offset=0&lang=ru"
-
+```
 # Создать статью в текущей локали (en)
+```
 curl -s -X POST "http://localhost:8000/api/articles?lang=en" \
   -H "Content-Type: application/json" \
   -d '{"title":"Hello","body":"English body","tags":["test","news"]}'
+```
 
 # Поиск (ru)
 curl -s "http://localhost:8000/api/search?q=django&limit=10&lang=ru"
